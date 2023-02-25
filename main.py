@@ -107,9 +107,7 @@ def main():
             # Simulate Fist (Minimize Current Window)
             center = lmList[mpHands.HandLandmark.WRIST]
             index_tip = lmList[mpHands.HandLandmark.INDEX_FINGER_TIP]
-            middle_tip = lmList[mpHands.HandLandmark.MIDDLE_FINGER_TIP]
-            ring_tip = lmList[mpHands.HandLandmark.RING_FINGER_TIP]
-            pinky_tip = lmList[mpHands.HandLandmark.PINKY_TIP]
+            
 
             fistDist = (math.sqrt(math.pow(index_tip[1]-center[1], 2) + math.pow(index_tip[2]-center[2], 2)))
             if (100 > fistDist):
