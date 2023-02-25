@@ -55,8 +55,12 @@ def main():
     #setting up the window properties
     cv2.namedWindow(WINDOWNAME,1)
     cv2.setWindowProperty(WINDOWNAME, cv2.WND_PROP_TOPMOST, 1)
-    global LASTCLICK
-    global CURRCLICK
+    global LASTLEFTCLICK
+    global CURRLEFTCLICK
+    global LASTRIGHTCLICK
+    global CURRRIGHTCLICK
+    global LASTFIST
+    global CURRFIST
     cap = cv2.VideoCapture(0)
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, FRAMEWIDTH)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, FRAMEHEIGHT)
@@ -100,6 +104,7 @@ def main():
                     LASTRIGHTCLICK = CURRRIGHTCLICK
                     mouseRightClick(int(scaledX), int(scaledY))
                 
+            # Simulate Fist (Minimize Current Window)
             center = lmList[mpHands.HandLandmark.WRIST]
             index_tip = lmList[mpHands.HandLandmark.INDEX_FINGER_TIP]
             middle_tip = lmList[mpHands.HandLandmark.MIDDLE_FINGER_TIP]
