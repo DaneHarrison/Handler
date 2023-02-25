@@ -10,9 +10,14 @@ import math
     
 FRAMEWIDTH = 640
 FRAMEHEIGHT = 480
-# def scale
+MONITORWIDTH = 1920
+MONITORHEIGHT = 1080
 
-
+# def scale to monitor size
+def scaleToMonitor(xpos, ypos):
+    x = xpos * MONITORWIDTH/FRAMEWIDTH
+    y = ypos * MONITORHEIGHT/FRAMEHEIGHT
+    return x,y
 
 def main():
     cap = cv2.VideoCapture(0)
@@ -29,15 +34,17 @@ def main():
         if len(lmList) != 0:
             #track the tip of the index finger to move the mouse
             _,xpos,ypos = lmList[mpHands.HandLandmark.INDEX_FINGER_TIP]
-            mouseMove(xpos, ypos)
+            scaledX, scaledY = scaleToMonitor(xpos, ypos)
+            mouseMove(int(scaledX), int(scaledY))
 
             # Find the distance to determine if a left click action should be done
             _,x1,y1 = lmList[mpHands.HandLandmark.THUMB_TIP]
             _,x2,y2 = lmList[mpHands.HandLandmark.MIDDLE_FINGER_PIP]
             distance = math.sqrt(math.pow(x2-x1, 2) + math.pow(y2-y1, 2))
-            #print(distance)
-            if distance < 75:
+            print(distance)
+            if distance < 50:
                 print("click")
+                mouseClick(int(scaledX), int(scaledY))
             
         cv2.imshow("Video",image)
         cv2.waitKey(1)
