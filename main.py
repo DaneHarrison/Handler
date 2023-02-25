@@ -67,11 +67,12 @@ def main():
             mouseMove(int(ma_x_avg), int(ma_y_avg))
             # mouseMove(int(scaledX), int(scaledY))
 
-            _,x1,y1 = lmList[mpHands.HandLandmark.THUMB_TIP]
-            _,x2,y2 = lmList[mpHands.HandLandmark.MIDDLE_FINGER_PIP]
-            distance = math.sqrt(math.pow(x2-x1, 2) + math.pow(y2-y1, 2))
-            print(distance)
-            if distance < 75:
+            # Simulator Left Click
+            _,thumbTipX,thumbTipY = lmList[mpHands.HandLandmark.THUMB_TIP]
+            _,midFingPipX,midFingPipY = lmList[mpHands.HandLandmark.MIDDLE_FINGER_PIP]
+            leftClickDist = math.sqrt(math.pow(midFingPipX-thumbTipX, 2) + math.pow(midFingPipY-thumbTipY, 2))
+            #print(leftClickDist)
+            if leftClickDist < 75:
                 CURRCLICK = datetime.now().second
                 #print("click")
                 if CURRCLICK - LASTCLICK > DEBOUNCETIME:
