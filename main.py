@@ -10,9 +10,14 @@ import math
     
 FRAMEWIDTH = 640
 FRAMEHEIGHT = 480
-# def scale
+MONITORWIDTH = 1920
+MONITORHEIGHT = 1080
 
-
+# def scale to monitor size
+def scaleToMonitor(xpos, ypos):
+    x = xpos * MONITORWIDTH/FRAMEWIDTH
+    y = ypos * MONITORHEIGHT/FRAMEHEIGHT
+    return x,y
 
 def main():
     cap = cv2.VideoCapture(0)
@@ -29,13 +34,13 @@ def main():
         if len(lmList) != 0:
             #print(lmList[mpHands.HandLandmark.INDEX_FINGER_TIP])
             _,xpos,ypos = lmList[mpHands.HandLandmark.INDEX_FINGER_TIP]
-            mouseMove(xpos, ypos)
+            mouseMove(scaleToMonitor(xpos, ypos))
 
             _,x1,y1 = lmList[mpHands.HandLandmark.THUMB_TIP]
             _,x2,y2 = lmList[mpHands.HandLandmark.MIDDLE_FINGER_PIP]
             distance = math.sqrt(math.pow(x2-x1, 2) + math.pow(y2-y1, 2))
             print(distance)
-            if distance < 75:
+            if distance < 10:
                 print("click")
             
         cv2.imshow("Video",image)
