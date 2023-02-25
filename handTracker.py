@@ -33,7 +33,8 @@ class handTracker():
                 cx,cy = int(lm.x*w), int(lm.y*h)
                 lmlist.append([id,cx,cy])
             if draw:
-                cv2.circle(image,(cx,cy), 15 , (255,0,255), cv2.FILLED)
+                _,indexX,indexY = lmlist[self.mpHands.HandLandmark.INDEX_FINGER_TIP]
+                cv2.circle(image,(indexX,indexY), 15 , (255,0,255), cv2.FILLED)
 
         return lmlist
         
