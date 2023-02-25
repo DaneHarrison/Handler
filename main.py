@@ -1,4 +1,4 @@
-from datetime import time
+from datetime import datetime
 import cv2
 import mediapipe as mp
 from handTracker import handTracker
@@ -48,7 +48,7 @@ def main():
             distance = math.sqrt(math.pow(x2-x1, 2) + math.pow(y2-y1, 2))
             print(distance)
             if distance < 50:
-                CURRCLICK = time.time()
+                CURRCLICK = datetime.now()
                 #print("click")
                 if CURRCLICK - LASTCLICK > DEBOUNCETIME:
                     LASTCLICK = CURRCLICK
