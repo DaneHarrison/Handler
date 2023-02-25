@@ -4,6 +4,8 @@ import mediapipe as mp
 from handTracker import handTracker
 from mouseMover import mouseMove, mouseClick
 import math
+import win32gui
+import win32con
 
 #window properties 
 FRAMEWIDTH = 640
@@ -13,8 +15,11 @@ MONITORHEIGHT = 1080
 WINDOWNAME = "Video"
 
 DEBOUNCETIME = 2
+DEBOUNCETIMEFIST = 2
 LASTCLICK = 0
 CURRCLICK = 0
+LASTFIST = 0
+CURRFIST = 0
 
 MA_WINDOW = 5  # Number of frames to include in moving average
 ma_x, ma_y = [], []  # Lists to store cursor positions for moving average
@@ -47,6 +52,8 @@ def main():
     cv2.setWindowProperty(WINDOWNAME, cv2.WND_PROP_TOPMOST, 1)
     global LASTCLICK
     global CURRCLICK
+    global LASTFIST
+    global CURRFIST
     cap = cv2.VideoCapture(0)
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, FRAMEWIDTH)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, FRAMEHEIGHT)
@@ -79,6 +86,21 @@ def main():
                     LASTCLICK = CURRCLICK
                     mouseClick(int(scaledX), int(scaledY))
                 
+            center = lmList[mpHands.HandLandmark.WRIST]
+            index_tip = lmList[mpHands.HandLandmark.INDEX_FINGER_TIP]
+            middle_tip = lmList[mpHands.HandLandmark.MIDDLE_FINGER_TIP]
+            ring_tip = lmList[mpHands.HandLandmark.RING_FINGER_TIP]
+            pinky_tip = lmList[mpHands.HandLandmark.PINKY_TIP]
+
+            fistDist = (math.sqrt(math.pow(index_tip[1]-center[1], 2) + math.pow(index_tip[2]-center[2], 2)))
+            if (100 > fistDist):
+                CURRFIST = datetime.now().second
+                if CURRFIST - LASTFIST > DEBOUNCETIMEFIST:
+                    LASTFIST = CURRFIST
+                    #print("fist")
+                    hwnd = win32gui.GetForegroundWindow()
+                    win32gui.ShowWindow(hwnd, win32con.SW_MINIMIZE) 
+
         cv2.imshow(WINDOWNAME,image)    
             # when hit 'q', terminate the program
         if cv2.waitKey(1) & 0xFF == ord('q'):
