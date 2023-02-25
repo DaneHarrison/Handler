@@ -7,6 +7,7 @@ import math
 import win32gui
 import win32con
 from gestures import leftClick, fist
+import win32api
 
 #window properties 
 FRAMEWIDTH = 640
@@ -26,6 +27,10 @@ CURRRIGHTCLICK = 0
 DEBOUNCETIMEFIST = 2
 LASTFIST = 0
 CURRFIST = 0
+
+
+LASTFUCKYOU = 0
+CURRFUCKYOU = 0
 
 MA_WINDOW = 5  # Number of frames to include in moving average
 ma_x, ma_y = [], []  # Lists to store cursor positions for moving average
@@ -97,6 +102,8 @@ def main():
     global CURRRIGHTCLICK
     global LASTFIST
     global CURRFIST
+    global LASTFUCKYOU
+    global CURRFUCKYOU
     #setting up the window properties
     cv2.namedWindow(WINDOWNAME,1)
     cv2.setWindowProperty(WINDOWNAME, cv2.WND_PROP_TOPMOST, 1)
@@ -111,6 +118,7 @@ def main():
         image = tracker.handsFinder(flippedImg)
         lmList = tracker.positionFinder(image)
         mpHands = tracker.getHandsModule()
+        
         if len(lmList) != 0:
             scaledX, scaledY =smoothMouseMove(lmList, mpHands)
 
