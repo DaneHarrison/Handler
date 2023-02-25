@@ -6,6 +6,7 @@ from mouseMover import mouseMove,mouseLeftClick,mouseRightClick,detectOS
 import math
 import win32gui
 import win32con
+from gestures import leftClick, fist
 
 #window properties 
 FRAMEWIDTH = 640
