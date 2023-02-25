@@ -19,7 +19,9 @@ def main():
         mpHands = tracker.getHandsModule()
         if len(lmList) != 0:
             print(lmList[mpHands.HandLandmark.INDEX_FINGER_TIP])
-
+            _,xpos,ypos = lmList[mpHands.HandLandmark.INDEX_FINGER_TIP]
+            mouseMove(xpos, ypos)
+            
         cv2.imshow("Video",image)
         cv2.waitKey(1)
 
