@@ -13,7 +13,7 @@ FRAMEWIDTH = 640
 FRAMEHEIGHT = 480
 MONITORWIDTH = 1920
 MONITORHEIGHT = 1080
-WINDOWNAME = "Video"
+WINDOWNAME = "OpenCv Hackethon 2023"
 
 LEFTDEBOUNCETIME = 2
 LASTLEFTCLICK = 0
@@ -81,7 +81,7 @@ def main():
         lmList = tracker.positionFinder(image)
         mpHands = tracker.getHandsModule()
         if len(lmList) != 0:
-            scaledX, scaledY =smoothMouseMove(lmList, mpHands)
+            scaledX, scaledY = smoothMouseMove(lmList, mpHands)
             _,thumbTipX,thumbTipY = lmList[mpHands.HandLandmark.THUMB_TIP]
             _,midFingPipX,midFingPipY = lmList[mpHands.HandLandmark.MIDDLE_FINGER_PIP]
             leftClickDist = math.sqrt(math.pow(midFingPipX-thumbTipX, 2) + math.pow(midFingPipY-thumbTipY, 2))
