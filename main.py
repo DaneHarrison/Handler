@@ -1,7 +1,7 @@
 import cv2
 import mediapipe as mp
 from handTracker import handTracker
-from mouseMover import move, click
+from mouseMover import mouseMove, mouseClick
 
 #input image or video
 #identify if theres a person
