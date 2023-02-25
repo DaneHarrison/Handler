@@ -37,3 +37,5 @@ class handTracker():
 
         return lmlist
         
+    def getHandsModule(self):
+        return self.mpHands

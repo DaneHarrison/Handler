@@ -16,8 +16,9 @@ def main():
         flippedImg = cv2.flip(image, 1)
         image = tracker.handsFinder(flippedImg)
         lmList = tracker.positionFinder(image)
+        mpHands = tracker.getHandsModule()
         if len(lmList) != 0:
-            print(lmList[4])
+            print(lmList[mpHands.HandLandmark.INDEX_FINGER_TIP])
 
         cv2.imshow("Video",image)
         cv2.waitKey(1)
