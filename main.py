@@ -7,8 +7,14 @@ from mouseMover import mouseMove, mouseClick
 #identify if theres a person
 #train model yolo, draws boxes around person
 
+# def scale
+
+
+
 def main():
     cap = cv2.VideoCapture(0)
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 160)
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 120)
     tracker = handTracker()
 
     while True:
