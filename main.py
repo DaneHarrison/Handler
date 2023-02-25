@@ -34,7 +34,8 @@ def main():
         if len(lmList) != 0:
             #print(lmList[mpHands.HandLandmark.INDEX_FINGER_TIP])
             _,xpos,ypos = lmList[mpHands.HandLandmark.INDEX_FINGER_TIP]
-            mouseMove(scaleToMonitor(xpos, ypos))
+            scaledX, scaledY = scaleToMonitor(xpos, ypos)
+            mouseMove(scaledX, scaledY)
 
             _,x1,y1 = lmList[mpHands.HandLandmark.THUMB_TIP]
             _,x2,y2 = lmList[mpHands.HandLandmark.MIDDLE_FINGER_PIP]
