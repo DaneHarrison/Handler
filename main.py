@@ -5,7 +5,7 @@ import mediapipe as mp
 #identify if theres a person
 #train model yolo, draws boxes around person
 
-main():
+def main():
     cap = cv2.VideoCapture(0)
     mpHands = mp.solutions.hands
     hands = mpHands.Hands()
