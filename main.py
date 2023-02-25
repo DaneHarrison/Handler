@@ -28,7 +28,7 @@ def main():
             _,x2,y2 = lmList[mpHands.HandLandmark.MIDDLE_FINGER_PIP]
             distance = math.sqrt(math.pow(x2-x1, 2) + math.pow(y2-y1, 2))
             print(distance)
-            if distance < 100:
+            if distance < 75:
                 print("click")
             
         cv2.imshow("Video",image)
