@@ -8,15 +8,16 @@ import math
 #identify if theres a person
 #train model yolo, draws boxes around person
     
-
+FRAMEWIDTH = 640
+FRAMEHEIGHT = 480
 # def scale
 
 
 
 def main():
     cap = cv2.VideoCapture(0)
-    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 160)
-    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 120)
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH, FRAMEWIDTH)
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, FRAMEHEIGHT)
     tracker = handTracker()
 
     while True:
