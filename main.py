@@ -27,14 +27,15 @@ def main():
         lmList = tracker.positionFinder(image)
         mpHands = tracker.getHandsModule()
         if len(lmList) != 0:
-            #print(lmList[mpHands.HandLandmark.INDEX_FINGER_TIP])
+            #track the tip of the index finger to move the mouse
             _,xpos,ypos = lmList[mpHands.HandLandmark.INDEX_FINGER_TIP]
             mouseMove(xpos, ypos)
 
+            # Find the distance to determine if a left click action should be done
             _,x1,y1 = lmList[mpHands.HandLandmark.THUMB_TIP]
             _,x2,y2 = lmList[mpHands.HandLandmark.MIDDLE_FINGER_PIP]
             distance = math.sqrt(math.pow(x2-x1, 2) + math.pow(y2-y1, 2))
-            print(distance)
+            #print(distance)
             if distance < 75:
                 print("click")
             
