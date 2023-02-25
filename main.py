@@ -51,16 +51,22 @@ def getSmootherCursorPos(xpos, ypos):
     # return smoothed position
     return ma_x_avg, ma_y_avg
 
+def smoothMouseMove(lmList):
+    _,xpos,ypos = lmList[mpHands.HandLandmark.INDEX_FINGER_TIP]
+    scaledX, scaledY = scaleToMonitor(xpos, ypos)
+    ma_x_avg, ma_y_avg = getSmootherCursorPos(scaledX, scaledY)
+    mouseMove(int(ma_x_avg), int(ma_y_avg))
+
 def main():
-    #setting up the window properties
-    cv2.namedWindow(WINDOWNAME,1)
-    cv2.setWindowProperty(WINDOWNAME, cv2.WND_PROP_TOPMOST, 1)
     global LASTLEFTCLICK
     global CURRLEFTCLICK
     global LASTRIGHTCLICK
     global CURRRIGHTCLICK
     global LASTFIST
     global CURRFIST
+    #setting up the window properties
+    cv2.namedWindow(WINDOWNAME,1)
+    cv2.setWindowProperty(WINDOWNAME, cv2.WND_PROP_TOPMOST, 1)
     cap = cv2.VideoCapture(0)
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, FRAMEWIDTH)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, FRAMEHEIGHT)
@@ -73,13 +79,7 @@ def main():
         lmList = tracker.positionFinder(image)
         mpHands = tracker.getHandsModule()
         if len(lmList) != 0:
-            #print(lmList[mpHands.HandLandmark.INDEX_FINGER_TIP])
-            _,xpos,ypos = lmList[mpHands.HandLandmark.INDEX_FINGER_TIP]
-            scaledX, scaledY = scaleToMonitor(xpos, ypos)
-            ma_x_avg, ma_y_avg = getSmootherCursorPos(scaledX, scaledY)
-
-            mouseMove(int(ma_x_avg), int(ma_y_avg))
-            # mouseMove(int(scaledX), int(scaledY))
+            smoothMouseMove(lmList)
 
             # Simulate Left Click
             _,thumbTipX,thumbTipY = lmList[mpHands.HandLandmark.THUMB_TIP]
