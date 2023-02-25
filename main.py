@@ -1,6 +1,6 @@
 import cv2
 import mediapipe as mp
-import handTracker
+from handTracker import handTracker
 
 #input image or video
 #identify if theres a person
@@ -19,10 +19,6 @@ def main():
 
         cv2.imshow("Video",image)
         cv2.waitKey(1)
-
-    
-
-
 
 if __name__ == "__main__":
     main()

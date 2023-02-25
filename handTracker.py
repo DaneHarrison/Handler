@@ -13,27 +13,27 @@ class handTracker():
                                         self.detectionCon, self.trackCon)
         self.mpDraw = mp.solutions.drawing_utils
 
-        def handsFinder(self,image,draw=True):
-            imageRGB = cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
-            self.results = self.hands.process(imageRGB)
+    def handsFinder(self,image,draw=True):
+        imageRGB = cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
+        self.results = self.hands.process(imageRGB)
 
-            if self.results.multi_hand_landmarks:
-                for handLms in self.results.multi_hand_landmarks:
+        if self.results.multi_hand_landmarks:
+            for handLms in self.results.multi_hand_landmarks:
 
-                    if draw:
-                        self.mpDraw.draw_landmarks(image, handLms, self.mpHands.HAND_CONNECTIONS)
-            return image
-        
-        def positionFinder(self,image, handNo=0, draw=True):
-            lmlist = []
-            if self.results.multi_hand_landmarks:
-                Hand = self.results.multi_hand_landmarks[handNo]
-                for id, lm in enumerate(Hand.landmark):
-                    h,w,c = image.shape
-                    cx,cy = int(lm.x*w), int(lm.y*h)
-                    lmlist.append([id,cx,cy])
                 if draw:
-                    cv2.circle(image,(cx,cy), 15 , (255,0,255), cv2.FILLED)
+                    self.mpDraw.draw_landmarks(image, handLms, self.mpHands.HAND_CONNECTIONS)
+        return image
+    
+    def positionFinder(self,image, handNo=0, draw=True):
+        lmlist = []
+        if self.results.multi_hand_landmarks:
+            Hand = self.results.multi_hand_landmarks[handNo]
+            for id, lm in enumerate(Hand.landmark):
+                h,w,c = image.shape
+                cx,cy = int(lm.x*w), int(lm.y*h)
+                lmlist.append([id,cx,cy])
+            if draw:
+                cv2.circle(image,(cx,cy), 15 , (255,0,255), cv2.FILLED)
 
-            return lmlist
+        return lmlist
         
