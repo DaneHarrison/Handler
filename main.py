@@ -6,6 +6,7 @@ from mouseMover import mouseMove,mouseClick,detectOS
 import math
 import win32gui
 import win32con
+from gestures import leftClick, fist
 
 #window properties 
 FRAMEWIDTH = 640
@@ -72,7 +73,7 @@ def main():
             ma_x_avg, ma_y_avg = getSmootherCursorPos(scaledX, scaledY)
 
             mouseMove(int(ma_x_avg), int(ma_y_avg))
-            # mouseMove(int(scaledX), int(scaledY))
+            
 
             # Simulator Left Click
             _,thumbTipX,thumbTipY = lmList[mpHands.HandLandmark.THUMB_TIP]
