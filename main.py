@@ -51,7 +51,7 @@ def getSmootherCursorPos(xpos, ypos):
     # return smoothed position
     return ma_x_avg, ma_y_avg
 
-def smoothMouseMove(lmList):
+def smoothMouseMove(lmList, mpHands):
     _,xpos,ypos = lmList[mpHands.HandLandmark.INDEX_FINGER_TIP]
     scaledX, scaledY = scaleToMonitor(xpos, ypos)
     ma_x_avg, ma_y_avg = getSmootherCursorPos(scaledX, scaledY)
@@ -79,7 +79,7 @@ def main():
         lmList = tracker.positionFinder(image)
         mpHands = tracker.getHandsModule()
         if len(lmList) != 0:
-            smoothMouseMove(lmList)
+            smoothMouseMove(lmList, mpHands)
 
             # Simulate Left Click
             _,thumbTipX,thumbTipY = lmList[mpHands.HandLandmark.THUMB_TIP]
