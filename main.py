@@ -83,6 +83,7 @@ def main():
         image = tracker.handsFinder(flippedImg)
         lmList = tracker.positionFinder(image)
         mpHands = tracker.getHandsModule()
+        
         if len(lmList) != 0:
             scaledX, scaledY =smoothMouseMove(lmList, mpHands)
 

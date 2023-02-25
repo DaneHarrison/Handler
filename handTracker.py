@@ -9,8 +9,7 @@ class handTracker():
         self.modelComplex = modelComplexity
         self.trackCon = trackCon
         self.mpHands = mp.solutions.hands
-        self.hands = self.mpHands.Hands(self.mode, self.maxHands,self.modelComplex,
-                                        self.detectionCon, self.trackCon)
+        self.hands = self.mpHands.Hands(self.mode, self.maxHands,self.modelComplex,self.detectionCon, self.trackCon)
         self.mpDraw = mp.solutions.drawing_utils
 
     def handsFinder(self,image,draw=True):
