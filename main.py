@@ -13,7 +13,8 @@ def main():
 
     while True:
         success,image = cap.read()
-        image = tracker.handsFinder(image)
+        flippedImg = cv2.flip(image, 1)
+        image = tracker.handsFinder(flippedImg)
         lmList = tracker.positionFinder(image)
         if len(lmList) != 0:
             print(lmList[4])
