@@ -35,14 +35,15 @@ def main():
             #print(lmList[mpHands.HandLandmark.INDEX_FINGER_TIP])
             _,xpos,ypos = lmList[mpHands.HandLandmark.INDEX_FINGER_TIP]
             scaledX, scaledY = scaleToMonitor(xpos, ypos)
-            mouseMove(scaledX, scaledY)
+            mouseMove(int(scaledX), int(scaledY))
 
             _,x1,y1 = lmList[mpHands.HandLandmark.THUMB_TIP]
             _,x2,y2 = lmList[mpHands.HandLandmark.MIDDLE_FINGER_PIP]
             distance = math.sqrt(math.pow(x2-x1, 2) + math.pow(y2-y1, 2))
             print(distance)
-            if distance < 10:
+            if distance < 50:
                 print("click")
+                mouseClick(int(scaledX), int(scaledY))
             
         cv2.imshow("Video",image)
         cv2.waitKey(1)
