@@ -2,7 +2,7 @@ from datetime import datetime
 import cv2
 import mediapipe as mp
 from handTracker import handTracker
-from mouseMover import mouseMove, mouseClick
+from mouseMover import mouseMove,mouseClick,detectOS
 import math
 import win32gui
 import win32con
