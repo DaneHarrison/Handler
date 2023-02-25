@@ -54,31 +54,30 @@ def main():
 
     while True:
         success,image = cap.read()
-        if success:
-            flippedImg = cv2.flip(image, 1)
-            image = tracker.handsFinder(flippedImg)
-            lmList = tracker.positionFinder(image)
-            mpHands = tracker.getHandsModule()
-            if len(lmList) != 0:
-                #print(lmList[mpHands.HandLandmark.INDEX_FINGER_TIP])
-                _,xpos,ypos = lmList[mpHands.HandLandmark.INDEX_FINGER_TIP]
-                scaledX, scaledY = scaleToMonitor(xpos, ypos)
-                ma_x_avg, ma_y_avg = getSmootherCursorPos(scaledX, scaledY)
+        flippedImg = cv2.flip(image, 1)
+        image = tracker.handsFinder(flippedImg)
+        lmList = tracker.positionFinder(image)
+        mpHands = tracker.getHandsModule()
+        if len(lmList) != 0:
+            #print(lmList[mpHands.HandLandmark.INDEX_FINGER_TIP])
+            _,xpos,ypos = lmList[mpHands.HandLandmark.INDEX_FINGER_TIP]
+            scaledX, scaledY = scaleToMonitor(xpos, ypos)
+            ma_x_avg, ma_y_avg = getSmootherCursorPos(scaledX, scaledY)
 
-                mouseMove(int(ma_x_avg), int(ma_y_avg))
-                # mouseMove(int(scaledX), int(scaledY))
+            mouseMove(int(ma_x_avg), int(ma_y_avg))
+            # mouseMove(int(scaledX), int(scaledY))
 
-                # Simulator Left Click
-                _,thumbTipX,thumbTipY = lmList[mpHands.HandLandmark.THUMB_TIP]
-                _,midFingPipX,midFingPipY = lmList[mpHands.HandLandmark.MIDDLE_FINGER_PIP]
-                leftClickDist = math.sqrt(math.pow(midFingPipX-thumbTipX, 2) + math.pow(midFingPipY-thumbTipY, 2))
-                #print(leftClickDist)
-                if leftClickDist < 75:
-                    CURRCLICK = datetime.now().second
-                    #print("click")
-                    if CURRCLICK - LASTCLICK > DEBOUNCETIME:
-                        LASTCLICK = CURRCLICK
-                        mouseClick(int(scaledX), int(scaledY))
+            # Simulator Left Click
+            _,thumbTipX,thumbTipY = lmList[mpHands.HandLandmark.THUMB_TIP]
+            _,midFingPipX,midFingPipY = lmList[mpHands.HandLandmark.MIDDLE_FINGER_PIP]
+            leftClickDist = math.sqrt(math.pow(midFingPipX-thumbTipX, 2) + math.pow(midFingPipY-thumbTipY, 2))
+            #print(leftClickDist)
+            if leftClickDist < 75:
+                CURRCLICK = datetime.now().second
+                #print("click")
+                if CURRCLICK - LASTCLICK > DEBOUNCETIME:
+                    LASTCLICK = CURRCLICK
+                    mouseClick(int(scaledX), int(scaledY))
                 
         cv2.imshow(WINDOWNAME,image)    
             # when hit 'q', terminate the program
