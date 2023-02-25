@@ -2,7 +2,7 @@ from datetime import datetime
 import cv2
 import mediapipe as mp
 from handTracker import handTracker
-from mouseMover import mouseMove, mouseClick
+from mouseMover import *
 import math
 
 #window properties 
@@ -12,9 +12,13 @@ MONITORWIDTH = 1920
 MONITORHEIGHT = 1080
 WINDOWNAME = "Video"
 
-DEBOUNCETIME = 2
-LASTCLICK = 0
-CURRCLICK = 0
+LEFTDEBOUNCETIME = 2
+LASTLEFTCLICK = 0
+CURRLEFTCLICK = 0
+
+RIGHTDEBOUNCETIME = 2
+LASTRIGHTCLICK = 0
+CURRRIGHTCLICK = 0
 
 MA_WINDOW = 5  # Number of frames to include in moving average
 ma_x, ma_y = [], []  # Lists to store cursor positions for moving average
@@ -45,8 +49,10 @@ def main():
     #setting up the window properties
     cv2.namedWindow(WINDOWNAME,1)
     cv2.setWindowProperty(WINDOWNAME, cv2.WND_PROP_TOPMOST, 1)
-    global LASTCLICK
-    global CURRCLICK
+    global LASTLEFTCLICK
+    global CURRLEFTCLICK
+    global LASTRIGHTCLICK
+    global CURRRIGHTCLICK
     cap = cv2.VideoCapture(0)
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, FRAMEWIDTH)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, FRAMEHEIGHT)
@@ -67,17 +73,28 @@ def main():
             mouseMove(int(ma_x_avg), int(ma_y_avg))
             # mouseMove(int(scaledX), int(scaledY))
 
-            # Simulator Left Click
+            # Simulate Left Click
             _,thumbTipX,thumbTipY = lmList[mpHands.HandLandmark.THUMB_TIP]
             _,midFingPipX,midFingPipY = lmList[mpHands.HandLandmark.MIDDLE_FINGER_PIP]
             leftClickDist = math.sqrt(math.pow(midFingPipX-thumbTipX, 2) + math.pow(midFingPipY-thumbTipY, 2))
             #print(leftClickDist)
             if leftClickDist < 75:
-                CURRCLICK = datetime.now().second
-                #print("click")
-                if CURRCLICK - LASTCLICK > DEBOUNCETIME:
-                    LASTCLICK = CURRCLICK
-                    mouseClick(int(scaledX), int(scaledY))
+                CURRLEFTCLICK = datetime.now().second
+                #print("left click")
+                if CURRLEFTCLICK - LASTLEFTCLICK > LEFTDEBOUNCETIME:
+                    LASTLEFTCLICK = CURRLEFTCLICK
+                    mouseLeftClick(int(scaledX), int(scaledY))
+
+            # Simulate Right Click
+            _,pinkyTipX,pinkyTipY = lmList[mpHands.HandLandmark.PINKY_TIP]
+            _,wristX,wristY = lmList[mpHands.HandLandmark.WRIST]
+            rightClickDist = math.sqrt(math.pow(pinkyTipX-wristX, 2) + math.pow(pinkyTipY-wristY, 2))
+            if rightClickDist > 150:
+                CURRRIGHTCLICK = datetime.now().second
+                #print("right click")
+                if CURRRIGHTCLICK - LASTRIGHTCLICK > RIGHTDEBOUNCETIME:
+                    LASTRIGHTCLICK = CURRRIGHTCLICK
+                    mouseRightClick(int(scaledX), int(scaledY))
                 
         cv2.imshow(WINDOWNAME,image)    
             # when hit 'q', terminate the program
