@@ -1,5 +1,6 @@
 import cv2
 import mediapipe as mp
+import handTracker
 
 #input image or video
 #identify if theres a person
@@ -7,9 +8,19 @@ import mediapipe as mp
 
 def main():
     cap = cv2.VideoCapture(0)
-    mpHands = mp.solutions.hands
-    hands = mpHands.Hands()
-    mpDraw = mp.solutions.drawing_utils
+    tracker = handTracker()
+
+    while True:
+        success,image = cap.read()
+        image = tracker.handsFinder(image)
+        lmList = tracker.positionFinder(image)
+        if len(lmList) != 0:
+            print(lmList[4])
+
+        cv2.imshow("Video",image)
+        cv2.waitKey(1)
+
+    
 
 
 
