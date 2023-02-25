@@ -17,6 +17,9 @@ DEBOUNCETIME = 2
 LASTCLICK = 0
 CURRCLICK = 0
 
+MA_WINDOW = 5  # Number of frames to include in moving average
+ma_x, ma_y = [], []  # Lists to store cursor positions for moving average
+
 # def scale to monitor size
 def scaleToMonitor(xpos, ypos):
     x = xpos * MONITORWIDTH/FRAMEWIDTH
@@ -41,7 +44,22 @@ def main():
             #print(lmList[mpHands.HandLandmark.INDEX_FINGER_TIP])
             _,xpos,ypos = lmList[mpHands.HandLandmark.INDEX_FINGER_TIP]
             scaledX, scaledY = scaleToMonitor(xpos, ypos)
-            mouseMove(int(scaledX), int(scaledY))
+
+            ma_x.append(scaledX)
+            ma_y.append(scaledY)
+
+            # If moving average lists are longer than window size, remove oldest entry
+            if len(ma_x) > MA_WINDOW:
+                ma_x.pop(0)
+                ma_y.pop(0)
+
+            # Calculate moving average cursor position
+            ma_x_avg = sum(ma_x) / len(ma_x)
+            ma_y_avg = sum(ma_y) / len(ma_y)
+
+            # Move cursor to smoothed position
+            mouseMove(int(ma_x_avg), int(ma_y_avg))
+            # mouseMove(int(scaledX), int(scaledY))
 
             _,x1,y1 = lmList[mpHands.HandLandmark.THUMB_TIP]
             _,x2,y2 = lmList[mpHands.HandLandmark.MIDDLE_FINGER_PIP]
