@@ -66,7 +66,7 @@ def main():
             distance = math.sqrt(math.pow(x2-x1, 2) + math.pow(y2-y1, 2))
             print(distance)
             if distance < 50:
-                CURRCLICK = datetime.now()
+                CURRCLICK = datetime.now().second
                 #print("click")
                 if CURRCLICK - LASTCLICK > DEBOUNCETIME:
                     LASTCLICK = CURRCLICK
