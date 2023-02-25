@@ -1,6 +1,6 @@
 import win32api, win32con
 def mouseMove(x,y):
-    win32api.SetCursorPos((x,y))
+    win32api.SetCursorPos(x,y)
 
 def mouseClick(x,y):
     win32api.SetCursorPos((x,y))
