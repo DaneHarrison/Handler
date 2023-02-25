@@ -5,10 +5,6 @@ from handTracker import handTracker
 from mouseMover import mouseMove, mouseClick
 import math
 
-#input image or video
-#identify if theres a person
-#train model yolo, draws boxes around person
-
 #window properties 
 FRAMEWIDTH = 640
 FRAMEHEIGHT = 480
@@ -28,6 +24,22 @@ def scaleToMonitor(xpos, ypos):
     x = xpos * MONITORWIDTH/FRAMEWIDTH
     y = ypos * MONITORHEIGHT/FRAMEHEIGHT
     return x,y
+
+def getSmootherCursorPos(xpos, ypos):
+    ma_x.append(xpos)
+    ma_y.append(ypos)
+
+    # If moving average lists are longer than window size, remove oldest entry
+    if len(ma_x) > MA_WINDOW:
+        ma_x.pop(0)
+        ma_y.pop(0)
+
+    # Calculate moving average cursor position
+    ma_x_avg = sum(ma_x) / len(ma_x)
+    ma_y_avg = sum(ma_y) / len(ma_y)
+
+    # return smoothed position
+    return ma_x_avg, ma_y_avg
 
 def main():
     #setting up the window properties
@@ -50,20 +62,8 @@ def main():
             #print(lmList[mpHands.HandLandmark.INDEX_FINGER_TIP])
             _,xpos,ypos = lmList[mpHands.HandLandmark.INDEX_FINGER_TIP]
             scaledX, scaledY = scaleToMonitor(xpos, ypos)
+            ma_x_avg, ma_y_avg = getSmootherCursorPos(scaledX, scaledY)
 
-            ma_x.append(scaledX)
-            ma_y.append(scaledY)
-
-            # If moving average lists are longer than window size, remove oldest entry
-            if len(ma_x) > MA_WINDOW:
-                ma_x.pop(0)
-                ma_y.pop(0)
-
-            # Calculate moving average cursor position
-            ma_x_avg = sum(ma_x) / len(ma_x)
-            ma_y_avg = sum(ma_y) / len(ma_y)
-
-            # Move cursor to smoothed position
             mouseMove(int(ma_x_avg), int(ma_y_avg))
             # mouseMove(int(scaledX), int(scaledY))
 
