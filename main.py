@@ -59,6 +59,9 @@ def smoothMouseMove(lmList, mpHands):
     mouseMove(int(ma_x_avg), int(ma_y_avg))
     return scaledX, scaledY
 
+def calcDist( x1, x2, y1, y2):
+    return math.sqrt(math.pow(x2-x1, 2) + math.pow(y2-y1, 2))
+
 def main():
     global LASTLEFTCLICK
     global CURRLEFTCLICK
@@ -81,12 +84,20 @@ def main():
         lmList = tracker.positionFinder(image)
         mpHands = tracker.getHandsModule()
         if len(lmList) != 0:
-            scaledX, scaledY = smoothMouseMove(lmList, mpHands)
-            _,thumbTipX,thumbTipY = lmList[mpHands.HandLandmark.THUMB_TIP]
-            _,midFingPipX,midFingPipY = lmList[mpHands.HandLandmark.MIDDLE_FINGER_PIP]
-            leftClickDist = math.sqrt(math.pow(midFingPipX-thumbTipX, 2) + math.pow(midFingPipY-thumbTipY, 2))
+            scaledX, scaledY =smoothMouseMove(lmList, mpHands)
+
+            # Finger Coordinates
+            _, thumbTipX, thumbTipY = lmList[mpHands.HandLandmark.THUMB_TIP]
+            _, midFingPipX, midFingPipY = lmList[mpHands.HandLandmark.MIDDLE_FINGER_PIP]
+            _, pinkyTipX, pinkyTipY = lmList[mpHands.HandLandmark.PINKY_TIP]
+            _, wristX, wristY = lmList[mpHands.HandLandmark.WRIST]
+            _, indexTipX, indexTipY = lmList[mpHands.HandLandmark.INDEX_FINGER_TIP]
+            _, midFingTipX, midFingTipY = lmList[mpHands.HandLandmark.MIDDLE_FINGER_TIP]
+
+            leftClickDist = calcDist(midFingPipX, thumbTipX, midFingPipY, thumbTipY) 
+            leftClickDist2 = calcDist(midFingTipX, wristX, midFingTipY, wristY)
             #print(leftClickDist)
-            if leftClickDist < 75:
+            if leftClickDist < 75 and leftClickDist2 < 75:
                 CURRLEFTCLICK = datetime.now().second
                 #print("left click")
                 if CURRLEFTCLICK - LASTLEFTCLICK > LEFTDEBOUNCETIME:
@@ -94,9 +105,8 @@ def main():
                     mouseLeftClick(int(scaledX), int(scaledY))
 
             # Simulate Right Click
-            _,pinkyTipX,pinkyTipY = lmList[mpHands.HandLandmark.PINKY_TIP]
-            _,wristX,wristY = lmList[mpHands.HandLandmark.WRIST]
-            rightClickDist = math.sqrt(math.pow(pinkyTipX-wristX, 2) + math.pow(pinkyTipY-wristY, 2))
+            
+            rightClickDist = calcDist(pinkyTipX, wristX, pinkyTipY, wristY)
             if rightClickDist > 150:
                 CURRRIGHTCLICK = datetime.now().second
                 #print("right click")
@@ -105,11 +115,7 @@ def main():
                     mouseRightClick(int(scaledX), int(scaledY))
                 
             # Simulate Fist (Minimize Current Window)
-            center = lmList[mpHands.HandLandmark.WRIST]
-            index_tip = lmList[mpHands.HandLandmark.INDEX_FINGER_TIP]
-            
-
-            fistDist = (math.sqrt(math.pow(index_tip[1]-center[1], 2) + math.pow(index_tip[2]-center[2], 2)))
+            fistDist = calcDist(indexTipX, wristX, indexTipY, wristY)
             if (100 > fistDist):
                 CURRFIST = datetime.now().second
                 if CURRFIST - LASTFIST > DEBOUNCETIMEFIST:
