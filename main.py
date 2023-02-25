@@ -7,6 +7,7 @@ import math
 import win32gui
 import win32con
 from gestures import leftClick, fist
+import win32api
 
 #window properties 
 FRAMEWIDTH = 640
@@ -26,6 +27,10 @@ CURRRIGHTCLICK = 0
 DEBOUNCETIMEFIST = 2
 LASTFIST = 0
 CURRFIST = 0
+
+
+LASTFUCKYOU = 0
+CURRFUCKYOU = 0
 
 MA_WINDOW = 5  # Number of frames to include in moving average
 ma_x, ma_y = [], []  # Lists to store cursor positions for moving average
@@ -69,6 +74,8 @@ def main():
     global CURRRIGHTCLICK
     global LASTFIST
     global CURRFIST
+    global LASTFUCKYOU
+    global CURRFUCKYOU
     #setting up the window properties
     cv2.namedWindow(WINDOWNAME,1)
     cv2.setWindowProperty(WINDOWNAME, cv2.WND_PROP_TOPMOST, 1)
@@ -123,6 +130,22 @@ def main():
                     #print("fist")
                     hwnd = win32gui.GetForegroundWindow()
                     win32gui.ShowWindow(hwnd, win32con.SW_MINIMIZE) 
+
+            # FUCK YOU CODE BUGGY
+            # _,MiddleX,MiddleY = lmList[mpHands.HandLandmark.MIDDLE_FINGER_PIP]
+            # _,_,RingY = lmList[mpHands.HandLandmark.RING_FINGER_TIP]
+            # _,_,PinkyY = lmList[mpHands.HandLandmark.PINKY_TIP]
+            # _,IndexX,IndexY = lmList[mpHands.HandLandmark.INDEX_FINGER_TIP]
+
+            # if(MiddleY < IndexY and MiddleY < RingY and MiddleY < PinkyY and calcDist(MiddleX,IndexX,MiddleY,IndexY) > 100):
+            #     CURRFUCKYOU = datetime.now().second
+            #     if CURRFUCKYOU - LASTFUCKYOU > LEFTDEBOUNCETIME:
+            #         LASTFUCKYOU = CURRFUCKYOU
+            #         print("fuck you")
+                    # win32api.keybd_event(win32con.VK_MENU, 0, 0, 0)   
+                    # win32api.keybd_event(win32con.VK_TAB, 0, 0, 0)                      
+                    # win32api.keybd_event(win32con.VK_MENU, 0, win32con.KEYEVENTF_KEYUP, 0)  
+                    # win32api.keybd_event(win32con.VK_TAB, 0, win32con.KEYEVENTF_KEYUP, 0)
 
         cv2.imshow(WINDOWNAME,image)    
             # when hit 'q', terminate the program
