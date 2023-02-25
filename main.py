@@ -12,6 +12,7 @@ FRAMEWIDTH = 640
 FRAMEHEIGHT = 480
 MONITORWIDTH = 1920
 MONITORHEIGHT = 1080
+WINDOWNAME = "Video"
 
 # def scale to monitor size
 def scaleToMonitor(xpos, ypos):
@@ -20,6 +21,10 @@ def scaleToMonitor(xpos, ypos):
     return x,y
 
 def main():
+    #setting up the window properties
+    cv2.namedWindow(WINDOWNAME,1)
+    cv2.setWindowProperty(WINDOWNAME, cv2.WND_PROP_TOPMOST, 1)
+
     cap = cv2.VideoCapture(0)
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, FRAMEWIDTH)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, FRAMEHEIGHT)
@@ -44,9 +49,9 @@ def main():
             print(distance)
             if distance < 50:
                 print("click")
-                mouseClick(int(scaledX), int(scaledY))
+                #mouseClick(int(scaledX), int(scaledY))
             
-        cv2.imshow("Video",image)
+        cv2.imshow(WINDOWNAME,image)    
         cv2.waitKey(1)
 
 if __name__ == "__main__":
