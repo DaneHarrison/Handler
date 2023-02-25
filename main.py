@@ -56,6 +56,7 @@ def smoothMouseMove(lmList, mpHands):
     scaledX, scaledY = scaleToMonitor(xpos, ypos)
     ma_x_avg, ma_y_avg = getSmootherCursorPos(scaledX, scaledY)
     mouseMove(int(ma_x_avg), int(ma_y_avg))
+    return scaledX, scaledY
 
 def main():
     global LASTLEFTCLICK
@@ -79,9 +80,7 @@ def main():
         lmList = tracker.positionFinder(image)
         mpHands = tracker.getHandsModule()
         if len(lmList) != 0:
-            smoothMouseMove(lmList, mpHands)
-
-            # Simulate Left Click
+            scaledX, scaledY =smoothMouseMove(lmList, mpHands)
             _,thumbTipX,thumbTipY = lmList[mpHands.HandLandmark.THUMB_TIP]
             _,midFingPipX,midFingPipY = lmList[mpHands.HandLandmark.MIDDLE_FINGER_PIP]
             leftClickDist = math.sqrt(math.pow(midFingPipX-thumbTipX, 2) + math.pow(midFingPipY-thumbTipY, 2))
