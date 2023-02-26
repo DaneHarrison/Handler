@@ -63,6 +63,34 @@ def smoothMouseMove(lmList, mpHands):
 def calcDist( x1, x2, y1, y2):
     return math.sqrt(math.pow(x2-x1, 2) + math.pow(y2-y1, 2))
 
+def handleLeftClick(x, y):
+    global LASTLEFTCLICK
+    global CURRLEFTCLICK
+    CURRLEFTCLICK = datetime.now().second
+    #print("left click")
+    if CURRLEFTCLICK - LASTLEFTCLICK > LEFTDEBOUNCETIME:
+        LASTLEFTCLICK = CURRLEFTCLICK
+        mouseLeftClick(int(x), int(y))
+
+def handleRightClick(x, y):
+    global LASTRIGHTCLICK
+    global CURRRIGHTCLICK
+    CURRRIGHTCLICK = datetime.now().second
+    #print("right click")
+    if CURRRIGHTCLICK - LASTRIGHTCLICK > RIGHTDEBOUNCETIME:
+        LASTRIGHTCLICK = CURRRIGHTCLICK
+        mouseRightClick(int(x), int(y))
+
+def handleFist():
+    global LASTFIST
+    global CURRFIST
+    CURRFIST = datetime.now().second
+    if CURRFIST - LASTFIST > DEBOUNCETIMEFIST:
+        LASTFIST = CURRFIST
+        #print("fist")
+        hwnd = win32gui.GetForegroundWindow()
+        win32gui.ShowWindow(hwnd, win32con.SW_MINIMIZE) 
+
 def main():
     global LASTLEFTCLICK
     global CURRLEFTCLICK
@@ -102,48 +130,19 @@ def main():
             leftClickDist2 = calcDist(midFingTipX, wristX, midFingTipY, wristY)
             #print(leftClickDist)
             if leftClickDist < 75 and leftClickDist2 < 75:
-                CURRLEFTCLICK = datetime.now().second
-                #print("left click")
-                if CURRLEFTCLICK - LASTLEFTCLICK > LEFTDEBOUNCETIME:
-                    LASTLEFTCLICK = CURRLEFTCLICK
-                    mouseLeftClick(int(scaledX), int(scaledY))
+                handleLeftClick(scaledX, scaledY)
 
             # Simulate Right Click
             
             rightClickDist = calcDist(pinkyTipX, wristX, pinkyTipY, wristY)
             if rightClickDist > 150:
-                CURRRIGHTCLICK = datetime.now().second
-                #print("right click")
-                if CURRRIGHTCLICK - LASTRIGHTCLICK > RIGHTDEBOUNCETIME:
-                    LASTRIGHTCLICK = CURRRIGHTCLICK
-                    mouseRightClick(int(scaledX), int(scaledY))
+                handleRightClick(scaledX, scaledY)
                 
             # Simulate Fist (Minimize Current Window)
             fistDist = calcDist(indexTipX, wristX, indexTipY, wristY)
             if (100 > fistDist):
-                CURRFIST = datetime.now().second
-                if CURRFIST - LASTFIST > DEBOUNCETIMEFIST:
-                    LASTFIST = CURRFIST
-                    #print("fist")
-                    hwnd = win32gui.GetForegroundWindow()
-                    win32gui.ShowWindow(hwnd, win32con.SW_MINIMIZE) 
-
-            # FUCK YOU CODE BUGGY
-            # _,MiddleX,MiddleY = lmList[mpHands.HandLandmark.MIDDLE_FINGER_PIP]
-            # _,_,RingY = lmList[mpHands.HandLandmark.RING_FINGER_TIP]
-            # _,_,PinkyY = lmList[mpHands.HandLandmark.PINKY_TIP]
-            # _,IndexX,IndexY = lmList[mpHands.HandLandmark.INDEX_FINGER_TIP]
-
-            # if(MiddleY < IndexY and MiddleY < RingY and MiddleY < PinkyY and calcDist(MiddleX,IndexX,MiddleY,IndexY) > 100):
-            #     CURRFUCKYOU = datetime.now().second
-            #     if CURRFUCKYOU - LASTFUCKYOU > LEFTDEBOUNCETIME:
-            #         LASTFUCKYOU = CURRFUCKYOU
-            #         print("fuck you")
-                    # win32api.keybd_event(win32con.VK_MENU, 0, 0, 0)   
-                    # win32api.keybd_event(win32con.VK_TAB, 0, 0, 0)                      
-                    # win32api.keybd_event(win32con.VK_MENU, 0, win32con.KEYEVENTF_KEYUP, 0)  
-                    # win32api.keybd_event(win32con.VK_TAB, 0, win32con.KEYEVENTF_KEYUP, 0)
-
+                handleFist()
+                
         cv2.imshow(WINDOWNAME,image)    
             # when hit 'q', terminate the program
         if cv2.waitKey(1) & 0xFF == ord('q'):
