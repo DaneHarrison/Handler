@@ -8,6 +8,9 @@ import win32gui
 import win32con
 from gestures import leftClick, fist
 import win32api
+import pyautogui
+import os
+import numpy as np
 
 #window properties 
 FRAMEWIDTH = 640
@@ -146,6 +149,23 @@ def main():
             fistDist = calcDist(indexTipX, wristX, indexTipY, wristY)
             if (100 > fistDist):
                 handleFist()
+
+            #snapshot
+            cwd = os.getcwd()
+            os.chdir(cwd)
+
+            midDist = calcDist(midFingTipX,wristX,midFingTipY,wristY)
+            if(midDist > 100):
+                myScreenshot = pyautogui.screenshot()
+                myScreenshot = cv2.cvtColor(np.array(myScreenshot),cv2.COLOR_RGB2BGR)
+                cv2.imwrite("outputimage.png",myScreenshot)
+                print('a')
+
+                #myScreenshot.save(r'C:\Users\Subhash\Desktop\screenshot.png')
+
+
+        
+        
                 
         cv2.imshow(WINDOWNAME,image)    
             # when hit 'q', terminate the program
