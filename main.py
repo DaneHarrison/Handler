@@ -17,7 +17,7 @@ FRAMEWIDTH = 640
 FRAMEHEIGHT = 480
 MONITORWIDTH = 1920
 MONITORHEIGHT = 1080
-WINDOWNAME = "OpenCv Hackethon 2023"
+WINDOWNAME = "Hackethon 2023 group 15"
 
 LEFTDEBOUNCETIME = 2
 LASTLEFTCLICK = 0
@@ -30,10 +30,6 @@ CURRRIGHTCLICK = 0
 DEBOUNCETIMEFIST = 2
 LASTFIST = 0
 CURRFIST = 0
-
-
-LASTFUCKYOU = 0
-CURRFUCKYOU = 0
 
 MA_WINDOW = 5  # Number of frames to include in moving average
 ma_x, ma_y = [], []  # Lists to store cursor positions for moving average
@@ -105,8 +101,7 @@ def main():
     global CURRRIGHTCLICK
     global LASTFIST
     global CURRFIST
-    global LASTFUCKYOU
-    global CURRFUCKYOU
+
     #setting up the window properties
     cv2.namedWindow(WINDOWNAME,1)
     cv2.setWindowProperty(WINDOWNAME, cv2.WND_PROP_TOPMOST, 1)
