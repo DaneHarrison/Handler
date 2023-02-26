@@ -95,16 +95,9 @@ def handleFist():
         win32gui.ShowWindow(hwnd, win32con.SW_MINIMIZE) 
 
 def main():
-    global LASTLEFTCLICK
-    global CURRLEFTCLICK
-    global LASTRIGHTCLICK
-    global CURRRIGHTCLICK
-    global LASTFIST
-    global CURRFIST
-
     #setting up the window properties
     cv2.namedWindow(WINDOWNAME,1)
-    cv2.setWindowProperty(WINDOWNAME, cv2.WND_PROP_TOPMOST, 1)
+    # cv2.setWindowProperty(WINDOWNAME, cv2.WND_PROP_TOPMOST, 1)
     cap = cv2.VideoCapture(0)
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, FRAMEWIDTH)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, FRAMEHEIGHT)
@@ -129,9 +122,9 @@ def main():
             _, midFingTipX, midFingTipY = lmList[mpHands.HandLandmark.MIDDLE_FINGER_TIP]
 
             leftClickDist = calcDist(midFingPipX, thumbTipX, midFingPipY, thumbTipY) 
-            leftClickDist2 = calcDist(midFingTipX, wristX, midFingTipY, wristY)
+            leftClickDist2 = calcDist(midFingTipX, indexTipX, midFingTipY, indexTipY)
             #print(leftClickDist)
-            if leftClickDist < 75 and leftClickDist2 < 75:
+            if leftClickDist < 75 and leftClickDist2 > 50:
                 handleLeftClick(scaledX, scaledY)
 
             # Simulate Right Click
