@@ -31,6 +31,10 @@ DEBOUNCETIMEFIST = 2
 LASTFIST = 0
 CURRFIST = 0
 
+DEBOUNCETIMESS = 5
+LASTSS = 0
+CURRSS = 0
+
 MA_WINDOW = 5  # Number of frames to include in moving average
 ma_x, ma_y = [], []  # Lists to store cursor positions for moving average
 
@@ -94,6 +98,23 @@ def handleFist():
         hwnd = win32gui.GetForegroundWindow()
         win32gui.ShowWindow(hwnd, win32con.SW_MINIMIZE) 
 
+def handleSS():
+    global LASTSS
+    global CURRSS
+    #snapshot
+    cwd = os.getcwd()
+    os.chdir(cwd)
+
+    CURRSS = datetime.now().second
+    if CURRSS - LASTSS > DEBOUNCETIMESS:
+        LASTSS = CURRSS
+        #print("snapshot")
+        cwd = os.getcwd()
+        os.chdir(cwd)
+        img = pyautogui.screenshot()
+        img = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
+        cv2.imwrite("screenshot.png", img)
+
 def main():
     #setting up the window properties
     cv2.namedWindow(WINDOWNAME,1)
@@ -108,7 +129,11 @@ def main():
         flippedImg = cv2.flip(image, 1)
         image = tracker.handsFinder(flippedImg)
         lmList = tracker.positionFinder(image)
-        mpHands = tracker.getHandsModule()
+        mpHands = tracker.getHandsModule()        
+        cv2.imshow(WINDOWNAME,image)    
+            # when hit 'q', terminate the program
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
         
         if len(lmList) != 0:
             scaledX, scaledY =smoothMouseMove(lmList, mpHands)
@@ -126,34 +151,28 @@ def main():
             #print(leftClickDist)
             if leftClickDist < 75 and leftClickDist2 > 50:
                 handleLeftClick(scaledX, scaledY)
+                continue
 
             # Simulate Right Click
             
             rightClickDist = calcDist(pinkyTipX, wristX, pinkyTipY, wristY)
             if rightClickDist > 150:
                 handleRightClick(scaledX, scaledY)
+                continue
                 
             # Simulate Fist (Minimize Current Window)
             fistDist = calcDist(indexTipX, wristX, indexTipY, wristY)
             if (100 > fistDist):
                 handleFist()
+                continue
+            
+            ssDist1 = calcDist(midFingTipX,wristX,midFingTipY,wristY)
+            ssDist2 = calcDist(pinkyTipX, midFingTipX, pinkyTipY, midFingTipX)
+            if(ssDist1 > 100 and ssDist2 > 200):
+                handleSS()
+                continue
 
-            #snapshot
-            cwd = os.getcwd()
-            os.chdir(cwd)
-
-            midDist = calcDist(midFingTipX,wristX,midFingTipY,wristY)
-            if(midDist > 100):
-                myScreenshot = pyautogui.screenshot()
-                myScreenshot = cv2.cvtColor(np.array(myScreenshot),cv2.COLOR_RGB2BGR)
-                cv2.imwrite("outputimage.png",myScreenshot)
-                print("screenshotted")
-
-                
-        cv2.imshow(WINDOWNAME,image)    
-            # when hit 'q', terminate the program
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
+        
 
 if __name__ == "__main__":
     main()
