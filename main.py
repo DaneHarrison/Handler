@@ -154,13 +154,7 @@ def main():
                 myScreenshot = pyautogui.screenshot()
                 myScreenshot = cv2.cvtColor(np.array(myScreenshot),cv2.COLOR_RGB2BGR)
                 cv2.imwrite("outputimage.png",myScreenshot)
-                print('a')
 
-                #myScreenshot.save(r'C:\Users\Subhash\Desktop\screenshot.png')
-
-
-        
-        
                 
         cv2.imshow(WINDOWNAME,image)    
             # when hit 'q', terminate the program
