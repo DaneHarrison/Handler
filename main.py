@@ -154,6 +154,7 @@ def main():
                 myScreenshot = pyautogui.screenshot()
                 myScreenshot = cv2.cvtColor(np.array(myScreenshot),cv2.COLOR_RGB2BGR)
                 cv2.imwrite("outputimage.png",myScreenshot)
+                print("screenshotted")
 
                 
         cv2.imshow(WINDOWNAME,image)    
