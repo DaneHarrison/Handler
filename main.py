@@ -2,7 +2,7 @@ from datetime import datetime
 import cv2
 import mediapipe as mp
 from handTracker import handTracker
-from mouseMover import mouseMove,mouseLeftClick,mouseRightClick,detectOS
+from mouseMover import mouseMove, mouseLeftClick, mouseRightClick, detectOS
 import math
 import win32gui
 import win32con
@@ -12,7 +12,7 @@ import pyautogui
 import os
 import numpy as np
 
-#window properties 
+# window properties
 FRAMEWIDTH = 640
 FRAMEHEIGHT = 480
 MONITORWIDTH = 1920
@@ -38,11 +38,13 @@ CURRSS = 0
 MA_WINDOW = 5  # Number of frames to include in moving average
 ma_x, ma_y = [], []  # Lists to store cursor positions for moving average
 
+
 # def scale to monitor size
 def scaleToMonitor(xpos, ypos):
-    x = xpos * MONITORWIDTH/FRAMEWIDTH
-    y = ypos * MONITORHEIGHT/FRAMEHEIGHT
-    return x,y
+    x = xpos * MONITORWIDTH / FRAMEWIDTH
+    y = ypos * MONITORHEIGHT / FRAMEHEIGHT
+    return x, y
+
 
 def getSmootherCursorPos(xpos, ypos):
     ma_x.append(xpos)
@@ -60,33 +62,38 @@ def getSmootherCursorPos(xpos, ypos):
     # return smoothed position
     return ma_x_avg, ma_y_avg
 
+
 def smoothMouseMove(lmList, mpHands):
-    _,xpos,ypos = lmList[mpHands.HandLandmark.INDEX_FINGER_TIP]
+    _, xpos, ypos = lmList[mpHands.HandLandmark.INDEX_FINGER_TIP]
     scaledX, scaledY = scaleToMonitor(xpos, ypos)
     ma_x_avg, ma_y_avg = getSmootherCursorPos(scaledX, scaledY)
     mouseMove(int(ma_x_avg), int(ma_y_avg))
     return scaledX, scaledY
 
-def calcDist( x1, x2, y1, y2):
-    return math.sqrt(math.pow(x2-x1, 2) + math.pow(y2-y1, 2))
+
+def calcDist(x1, x2, y1, y2):
+    return math.sqrt(math.pow(x2 - x1, 2) + math.pow(y2 - y1, 2))
+
 
 def handleLeftClick(x, y):
     global LASTLEFTCLICK
     global CURRLEFTCLICK
     CURRLEFTCLICK = datetime.now().second
-    #print("left click")
+    # print("left click")
     if CURRLEFTCLICK - LASTLEFTCLICK > LEFTDEBOUNCETIME:
         LASTLEFTCLICK = CURRLEFTCLICK
         mouseLeftClick(int(x), int(y))
+
 
 def handleRightClick(x, y):
     global LASTRIGHTCLICK
     global CURRRIGHTCLICK
     CURRRIGHTCLICK = datetime.now().second
-    #print("right click")
+    # print("right click")
     if CURRRIGHTCLICK - LASTRIGHTCLICK > RIGHTDEBOUNCETIME:
         LASTRIGHTCLICK = CURRRIGHTCLICK
         mouseRightClick(int(x), int(y))
+
 
 def handleFist():
     global LASTFIST
@@ -94,30 +101,32 @@ def handleFist():
     CURRFIST = datetime.now().second
     if CURRFIST - LASTFIST > DEBOUNCETIMEFIST:
         LASTFIST = CURRFIST
-        #print("fist")
+        # print("fist")
         hwnd = win32gui.GetForegroundWindow()
-        win32gui.ShowWindow(hwnd, win32con.SW_MINIMIZE) 
+        win32gui.ShowWindow(hwnd, win32con.SW_MINIMIZE)
+
 
 def handleSS():
     global LASTSS
     global CURRSS
-    #snapshot
+    # snapshot
     cwd = os.getcwd()
     os.chdir(cwd)
 
     CURRSS = datetime.now().second
     if CURRSS - LASTSS > DEBOUNCETIMESS:
         LASTSS = CURRSS
-        #print("snapshot")
+        # print("snapshot")
         cwd = os.getcwd()
         os.chdir(cwd)
         img = pyautogui.screenshot()
         img = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
         cv2.imwrite("screenshot.png", img)
 
+
 def main():
-    #setting up the window properties
-    cv2.namedWindow(WINDOWNAME,1)
+    # setting up the window properties
+    cv2.namedWindow(WINDOWNAME, 1)
     # cv2.setWindowProperty(WINDOWNAME, cv2.WND_PROP_TOPMOST, 1)
     cap = cv2.VideoCapture(0)
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, FRAMEWIDTH)
@@ -125,18 +134,18 @@ def main():
     tracker = handTracker()
 
     while True:
-        success,image = cap.read()
+        success, image = cap.read()
         flippedImg = cv2.flip(image, 1)
         image = tracker.handsFinder(flippedImg)
         lmList = tracker.positionFinder(image)
-        mpHands = tracker.getHandsModule()        
-        cv2.imshow(WINDOWNAME,image)    
-            # when hit 'q', terminate the program
-        if cv2.waitKey(1) & 0xFF == ord('q'):
+        mpHands = tracker.getHandsModule()
+        cv2.imshow(WINDOWNAME, image)
+        # when hit 'q', terminate the program
+        if cv2.waitKey(1) & 0xFF == ord("q"):
             break
-        
+
         if len(lmList) != 0:
-            scaledX, scaledY =smoothMouseMove(lmList, mpHands)
+            scaledX, scaledY = smoothMouseMove(lmList, mpHands)
 
             # Finger Coordinates
             _, thumbTipX, thumbTipY = lmList[mpHands.HandLandmark.THUMB_TIP]
@@ -146,34 +155,32 @@ def main():
             _, indexTipX, indexTipY = lmList[mpHands.HandLandmark.INDEX_FINGER_TIP]
             _, midFingTipX, midFingTipY = lmList[mpHands.HandLandmark.MIDDLE_FINGER_TIP]
 
-            leftClickDist = calcDist(midFingPipX, thumbTipX, midFingPipY, thumbTipY) 
+            leftClickDist = calcDist(midFingPipX, thumbTipX, midFingPipY, thumbTipY)
             leftClickDist2 = calcDist(midFingTipX, indexTipX, midFingTipY, indexTipY)
-            #print(leftClickDist)
+            # print(leftClickDist)
             if leftClickDist < 75 and leftClickDist2 > 50:
                 handleLeftClick(scaledX, scaledY)
                 continue
 
             # Simulate Right Click
-            
+
             rightClickDist = calcDist(pinkyTipX, wristX, pinkyTipY, wristY)
             if rightClickDist > 150:
                 handleRightClick(scaledX, scaledY)
                 continue
-                
+
             # Simulate Fist (Minimize Current Window)
             fistDist = calcDist(indexTipX, wristX, indexTipY, wristY)
-            if (100 > fistDist):
+            if 100 > fistDist:
                 handleFist()
                 continue
-            
-            ssDist1 = calcDist(midFingTipX,wristX,midFingTipY,wristY)
+
+            ssDist1 = calcDist(midFingTipX, wristX, midFingTipY, wristY)
             ssDist2 = calcDist(pinkyTipX, midFingTipX, pinkyTipY, midFingTipX)
-            if(ssDist1 > 100 and ssDist2 > 200):
+            if ssDist1 > 100 and ssDist2 > 200:
                 handleSS()
                 continue
 
-        
 
 if __name__ == "__main__":
     main()
-
