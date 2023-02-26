@@ -98,8 +98,7 @@ def main():
     global CURRRIGHTCLICK
     global LASTFIST
     global CURRFIST
-    global LASTFUCKYOU
-    global CURRFUCKYOU
+
     #setting up the window properties
     cv2.namedWindow(WINDOWNAME,1)
     cv2.setWindowProperty(WINDOWNAME, cv2.WND_PROP_TOPMOST, 1)
