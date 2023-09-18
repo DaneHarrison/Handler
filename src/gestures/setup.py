@@ -6,8 +6,6 @@ Points = mp.hands.HandLandmark # 21 in total, well documented on [Google's devel
 
  
 class Setup(Gesture):
-    DEBOUNCETIMEFIST = 2
-
     def __init__(self, inSetUp):
         self.inSetUp = inSetUp
 

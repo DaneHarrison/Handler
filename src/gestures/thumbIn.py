@@ -7,8 +7,7 @@ Points = mp.hands.HandLandmark # 21 in total, well documented on [Google's devel
  
  
 class ThumbIn(Gesture):
-    LEFTDEBOUNCETIME = 2 # Used to prevent duplicate left click requests
-
+    DELAY = 2 # Used to prevent duplicate left click requests
 
     def check(self, handTracker) -> bool:
         wristX, wristY = handTracker.readPointPosi(Points.WRIST)
@@ -24,6 +23,6 @@ class ThumbIn(Gesture):
         currAction = datetime.now().second
         x, y = handTracker.readPointPosi()
 
-        if currAction - self.lastAction > ThumbIn.RIGHTDEBOUNCETIME:
+        if currAction - self.lastAction > ThumbIn.DELAY:
             self.lastAction = currAction
             mouse.leftClick(int(x), int(y))

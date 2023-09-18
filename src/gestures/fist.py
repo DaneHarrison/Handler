@@ -8,8 +8,7 @@ Points = mp.hands.HandLandmark # 21 in total, well documented on [Google's devel
 
  
 class Fist(Gesture):
-    DEBOUNCETIMEFIST = 2 # used to prevent duplicate close window requests
-
+    DELAY = 2 # used to prevent duplicate close window requests
 
     def check(self, handTracker) -> bool:
         wristX, wristY = handTracker.readPointPosi(Points.WRIST)
@@ -22,7 +21,7 @@ class Fist(Gesture):
     def triggerAction(self, handTracker, mouse):
         currAction = datetime.now().second
 
-        if currAction - self.lastAction > Fist.DEBOUNCETIMEFIST:
+        if currAction - self.lastAction > Fist.DELAY:
             self.lastAction = currAction
             window = win32gui.GetForegroundWindow()
             win32gui.ShowWindow(window, win32con.SW_MINIMIZE)

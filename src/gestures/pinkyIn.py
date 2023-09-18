@@ -7,8 +7,7 @@ Points = mp.hands.HandLandmark # 21 in total, well documented on [Google's devel
 
 
 class PinkyIn(Gesture):
-    RIGHTDEBOUNCETIME = 2 # used to prevent duplicate right click requests
-
+    DELAY = 2 # used to prevent duplicate right click requests
 
     def check(self, handTracker) -> bool:
         wristX, wristY = handTracker.readPointPosi(Points.WRIST)
@@ -22,6 +21,6 @@ class PinkyIn(Gesture):
         currAction = datetime.now().second
         x, y = handTracker.readPointPosi()
 
-        if currAction - self.lastAction > PinkyIn.RIGHTDEBOUNCETIME:
+        if currAction - self.lastAction > PinkyIn.DELAY:
             self.lastAction = currAction
             mouse.rightClick(int(x), int(y))

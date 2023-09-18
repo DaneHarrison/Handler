@@ -9,8 +9,7 @@ Points = mp.hands.HandLandmark # 21 in total, well documented on [Google's devel
 
 
 class SurfsUp(Gesture):
-    DEBOUNCETIMESS = 5 # Used to prevent duplicate screen shot requests
-
+    DELAY = 5 # Used to prevent duplicate screen shot requests
 
     def check(self, handTracker) -> bool:
         wristX, wristY = handTracker.readPointPosi(Points.WRIST)
@@ -27,9 +26,9 @@ class SurfsUp(Gesture):
         cwd = os.getcwd()
         os.chdir(cwd)
 
-        if currAction - self.lastAction > SurfsUp.DEBOUNCETIMESS:
+        if currAction - self.lastAction > SurfsUp.DELAY:
             self.lastAction = currAction
 
             img = pyautogui.screenshot()
             img = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
-            cv2.imwrite("screenshot.png", img)
+            cv2.imwrite('screenshot.png', img)
