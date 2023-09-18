@@ -18,7 +18,7 @@ class Gesture(ABC):
         return dist
 
     @abstractmethod
-    def check(self, handTracker):
+    def check(self, handTracker) -> bool:
         pass
 
     @abstractmethod

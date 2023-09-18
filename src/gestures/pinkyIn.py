@@ -10,7 +10,7 @@ class PinkyIn(Gesture):
     RIGHTDEBOUNCETIME = 2 # used to prevent duplicate right click requests
 
 
-    def check(self, handTracker):
+    def check(self, handTracker) -> bool:
         wristX, wristY = handTracker.readPointPosi(Points.WRIST)
         pinkyTipX, pinkyTipY = handTracker.readPointPosi(Points.PINKY_TIP)
 

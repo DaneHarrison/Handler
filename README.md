@@ -48,10 +48,10 @@
 
 ### Making changes
 1. Create a new gesture:  
-All new gestures should be added to the gesture folder and should implement the [gesture base class]() as well as its abstract methods **check and triggerAction**
+All new gestures should be added to the gesture folder and should implement the [gesture base class]() as well as some sort of cooldown to prevent duplicate actions
 
-2. Adding that gesture:  
-The list of gestures, where new gesture should be added to, can be found in the constructor [in this file](). Not that the once a gesture is detected, all other checks are abandoned. In short, **order matters**
+2. Adding it to HandTracker:  
+The list of gestures, where new gesture should be added to, can be found in the [HandTracker]() constructor. Not that the once a gesture is detected, all other checks are abandoned. In short, **order matters**
 
 3. Testing:  
 Gestures are detected by distances between different hand points, therefore, to test which hand points are most unique to a given gesture it is useful to use the setup gesture. This option can easily be toggled through the SETUP_MODE constant  in [main]()

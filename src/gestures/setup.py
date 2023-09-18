@@ -11,7 +11,7 @@ class Setup(Gesture):
     def __init__(self, inSetUp):
         self.inSetUp = inSetUp
 
-    def check(self, handTracker):
+    def check(self, handTracker) -> bool:
         return self.inSetUp
 
     def triggerAction(self, handTracker, mouse):

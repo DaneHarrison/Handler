@@ -11,7 +11,7 @@ class Fist(Gesture):
     DEBOUNCETIMEFIST = 2 # used to prevent duplicate close window requests
 
 
-    def check(self, handTracker):
+    def check(self, handTracker) -> bool:
         wristX, wristY = handTracker.readPointPosi(Points.WRIST)
         indexTipX, indexTipY = handTracker.readPointPosi(Points.INDEX_FINGER_TIP)
 

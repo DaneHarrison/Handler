@@ -10,7 +10,7 @@ class ThumbIn(Gesture):
     LEFTDEBOUNCETIME = 2 # Used to prevent duplicate left click requests
 
 
-    def check(self, handTracker):
+    def check(self, handTracker) -> bool:
         wristX, wristY = handTracker.readPointPosi(Points.WRIST)
         pinkyTipX, pinkyTipY = handTracker.readPointPosi(Points.PINKY_TIP)
         midFingTipX, midFingTipY = handTracker.readPointPosi(Points.MIDDLE_FINGER_TIP)
