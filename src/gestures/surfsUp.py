@@ -1,15 +1,14 @@
 from gestures.gesture import Gesture
 
 from mediapipe import solutions as mp
-from datetime import datetime
 import numpy as np
-import os, cv2, pyautogui
+import os, cv2, time, pyautogui
 
 Points = mp.hands.HandLandmark # 21 in total, well documented on [Google's developers website](https://developers.google.com/mediapipe/solutions/vision/hand_landmarker)
 
 
 class SurfsUp(Gesture):
-    DELAY = 5 # Used to prevent duplicate screen shot requests
+    DELAY = 1 # Used to prevent duplicate screen shot requests
 
     def check(self, handTracker) -> bool:
         # tip of thumb should be far from index
@@ -49,12 +48,12 @@ class SurfsUp(Gesture):
         return showing
 
     def triggerAction(self, handTracker, mouse):
-        print('surfsup')
-        currAction = datetime.now().second
+        currAction = time.time()
         cwd = os.getcwd()
         os.chdir(cwd)
 
         if currAction - self.lastAction > SurfsUp.DELAY:
+            print('Action: surfsup')
             self.lastAction = currAction
 
             img = pyautogui.screenshot()

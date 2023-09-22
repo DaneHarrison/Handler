@@ -1,14 +1,13 @@
 from gestures.gesture import Gesture
 
 from mediapipe import solutions as mp
-from datetime import datetime
-import win32gui, win32con
+import time, win32gui, win32con
 
 Points = mp.hands.HandLandmark # 21 in total, well documented on [Google's developers website](https://developers.google.com/mediapipe/solutions/vision/hand_landmarker)
 
  
 class Fist(Gesture):
-    DELAY = 2 # used to prevent duplicate close window requests
+    DELAY = 1 # used to prevent duplicate close window requests
 
     def check(self, handTracker) -> bool:
         # thumb should be pressed to the index finger's knuckle
@@ -44,10 +43,10 @@ class Fist(Gesture):
         return showing
 
     def triggerAction(self, handTracker, mouse):
-        print('fist')
-        currAction = datetime.now().second
+        currAction = time.time()
 
-        if currAction - self.lastAction > Fist.DELAY:
+        if currAction - self.lastAction >= Fist.DELAY:
+            print('Action: fist')
             self.lastAction = currAction
             window = win32gui.GetForegroundWindow()
             win32gui.ShowWindow(window, win32con.SW_MINIMIZE)

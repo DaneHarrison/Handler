@@ -1,13 +1,13 @@
 from gestures.gesture import Gesture 
 
 from mediapipe import solutions as mp
-from datetime import datetime
+import time
 
 Points = mp.hands.HandLandmark # 21 in total, well documented on [Google's developers website](https://developers.google.com/mediapipe/solutions/vision/hand_landmarker)
  
  
 class ThumbIn(Gesture):
-    DELAY = 2 # Used to prevent duplicate left click requests
+    DELAY = 1 # Used to prevent duplicate left click requests
 
     def check(self, handTracker) -> bool:
         # tip of thumb should be close to bottom of middle finger
@@ -32,16 +32,16 @@ class ThumbIn(Gesture):
 
         showing = False
         if thumbToMiddle and wristToIndex and wristToRing and wristToPinky:
-            if thumbToMiddle <= 60 and wristToIndex >= 300 and wristToRing >= 300 and wristToPinky >= 250:
+            if thumbToMiddle <= 60 and wristToIndex >= 340 and wristToRing >= 325 and wristToPinky >= 300:
                 showing = True
 
         return showing
 
     def triggerAction(self, handTracker, mouse):
-        print('thumbsin')
-        currAction = datetime.now().second
+        currAction = time.time()
         x, y = handTracker.readPointPosi()
 
-        if currAction - self.lastAction > ThumbIn.DELAY:
+        if currAction - self.lastAction >= ThumbIn.DELAY:
+            print('Action: thumbsin')
             self.lastAction = currAction
             mouse.leftClick(int(x), int(y))

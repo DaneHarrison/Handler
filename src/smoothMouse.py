@@ -24,6 +24,16 @@ class SmoothMouse(Mouse):
             
             super().move(int(move_avg_x), int(move_avg_y))
     
+    def leftClick(self, x: Optional[int], y: Optional[int]):
+        if x and y:
+            x, y = self._scaleToMonitor(x, y)
+            super().leftClick(int(x), int(y))
+
+    def rightClick(self, x: Optional[int], y: Optional[int]):
+        if x and y:
+            x, y = self._scaleToMonitor(x, y)
+            super().rightClick(int(x), int(y))
+
     def _scaleToMonitor(self, x: float, y: float) -> Tuple[float, float]:
         x = x * MONITOR_WIDTH / self.frameWidth
         y = y * MONITOR_HEIGHT / self.frameHeight

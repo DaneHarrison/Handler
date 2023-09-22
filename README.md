@@ -23,10 +23,6 @@
 
 <br>
 
-## To do
-1. Test gestures
-2. Add pictures to README
-
 
 ## Runtime instructions
 1. Navigate to the projects directory
@@ -55,6 +51,9 @@ The list of gestures, where new gesture should be added to, can be found in the 
 
 3. Testing:  
 Gestures are detected by distances between different hand points, therefore, to test which hand points are most unique to a given gesture it is useful to use the setup gesture. This option can easily be toggled through the SETUP_MODE constant  in [main]()
+
+4. Distances:
+Currently, gestures are detected based on distances between different hand points. However, these will vary between users and distances
 
 <br>
 

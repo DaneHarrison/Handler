@@ -1,13 +1,13 @@
 from gestures.gesture import Gesture
 
 from mediapipe import solutions as mp
-from datetime import datetime
+import time
 
 Points = mp.hands.HandLandmark # 21 in total, well documented on [Google's developers website](https://developers.google.com/mediapipe/solutions/vision/hand_landmarker)
 
 
 class L(Gesture):
-    DELAY = 2 # used to prevent duplicate right click requests
+    DELAY = 1 # used to prevent duplicate right click requests
 
     def check(self, handTracker) -> bool:
         # tip of thumb should be far from index
@@ -38,10 +38,10 @@ class L(Gesture):
         return showing
 
     def triggerAction(self, handTracker, mouse):
-        print('l')
-        currAction = datetime.now().second
+        currAction = time.time()
         x, y = handTracker.readPointPosi()
 
-        if currAction - self.lastAction > L.DELAY:
+        if currAction - self.lastAction >= L.DELAY:
+            print('Action: l')
             self.lastAction = currAction
             mouse.rightClick(int(x), int(y))
