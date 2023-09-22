@@ -10,16 +10,35 @@ class ThumbIn(Gesture):
     DELAY = 2 # Used to prevent duplicate left click requests
 
     def check(self, handTracker) -> bool:
-        wristX, wristY = handTracker.readPointPosi(Points.WRIST)
-        pinkyTipX, pinkyTipY = handTracker.readPointPosi(Points.PINKY_TIP)
-        midFingTipX, midFingTipY = handTracker.readPointPosi(Points.MIDDLE_FINGER_TIP)
+        # tip of thumb should be close to bottom of middle finger
+        thumbX, thumbY = handTracker.readPointPosi(Points.THUMB_TIP)
+        middleX, middleY = handTracker.readPointPosi(Points.MIDDLE_FINGER_MCP)
 
-        ssDist1 = self.calcDist(midFingTipX, wristX, midFingTipY, wristY)
-        ssDist2 = self.calcDist(pinkyTipX, midFingTipX, pinkyTipY, midFingTipX)
+        # other fingers should not be bent
+        wristX, wristY = handTracker.readPointPosi(Points.WRIST)
+        indexX, indexY = handTracker.readPointPosi(Points.INDEX_FINGER_TIP)
+        ringX, ringY = handTracker.readPointPosi(Points.RING_FINGER_TIP)
+        pinkyX, pinkyY = handTracker.readPointPosi(Points.PINKY_TIP)
         
-        return ssDist1 and ssDist1 > 50 and ssDist2 and ssDist2 < 75
+        thumbToMiddle = self.calcDist(thumbX, middleX, thumbY, middleY)
+        wristToIndex = self.calcDist(wristX, indexX, wristY, indexY)
+        wristToRing = self.calcDist(wristX, ringX, wristY, ringY)
+        wristToPinky = self.calcDist(wristX, pinkyX, wristY, pinkyY)
+        
+        thumbToMiddle = self.normalize(thumbToMiddle, handTracker)
+        wristToIndex = self.normalize(wristToIndex, handTracker)
+        wristToRing = self.normalize(wristToRing, handTracker)
+        wristToPinky = self.normalize(wristToPinky, handTracker)
+
+        showing = False
+        if thumbToMiddle and wristToIndex and wristToRing and wristToPinky:
+            if thumbToMiddle <= 60 and wristToIndex >= 300 and wristToRing >= 300 and wristToPinky >= 250:
+                showing = True
+
+        return showing
 
     def triggerAction(self, handTracker, mouse):
+        print('thumbsin')
         currAction = datetime.now().second
         x, y = handTracker.readPointPosi()
 

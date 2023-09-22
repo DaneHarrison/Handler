@@ -41,10 +41,10 @@
 ## Gestures
 ### Implemented
 
-|Fist|Thumb In|Pinky In|Surfs up|
+|Fist|Thumb In|L|Surfs up|
 |-|-|-|-|
 |Minimizes the window|Performs left click|Performs right click|Takes a screenshot|
-<img src='res/' width="500"/> | <img src='res/' width="500"/> | <img src='res/' width="500"/> | <img src='res/' width="500"/>
+<img src='res/fist.PNG'/> | <img src='res/thumbIn.PNG'/> | <img src='res/L.PNG'/> | <img src='res/surfsUp.PNG'/>
 
 ### Making changes
 1. Create a new gesture:  

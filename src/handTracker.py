@@ -1,6 +1,6 @@
 from gestures.setup import Setup
 from gestures.thumbIn import ThumbIn
-from gestures.pinkyIn import PinkyIn
+from gestures.l import L
 from gestures.surfsUp import SurfsUp
 from gestures.fist import Fist
 from mouse import Mouse
@@ -25,7 +25,7 @@ class HandTracker:
         self.gestures = [  
             Setup(setupMode),   # Toggles setup mode (controlled by a constant in main)    
             ThumbIn(),
-            PinkyIn(),
+            L(),
             SurfsUp(),
             Fist()
         ]
@@ -42,7 +42,7 @@ class HandTracker:
 
         # If any points were detected, load them for the hand
         if self.hand.multi_hand_landmarks:
-            currHand = self.results.multi_hand_landmarks[0]
+            currHand = self.hand.multi_hand_landmarks[0]
 
             # For each hand landmark, scale points by width and height, then save them
             for lm in currHand.landmark:
@@ -53,7 +53,7 @@ class HandTracker:
         x, y = self.readPointPosi()
 
         if self.hand.multi_hand_landmarks:
-            currHand = self.results.multi_hand_landmarks[0]
+            currHand = self.hand.multi_hand_landmarks[0]
             mp.drawing_utils.draw_landmarks(img, currHand, mp.hands.HAND_CONNECTIONS)
 
         if x and y:

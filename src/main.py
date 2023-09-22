@@ -5,7 +5,7 @@ import cv2
 
 # If active, gestures are not detected and point distances are printed 
 #    needs configruation in gestures/setup.py - triggerAction
-SETUP_MODE = False
+SETUP_MODE = True
 
 # Window Variables
 WINDOW_NAME = 'Handler'

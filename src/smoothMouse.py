@@ -22,7 +22,7 @@ class SmoothMouse(Mouse):
             x, y = self._scaleToMonitor(x, y)
             move_avg_x, move_avg_y = self._getSmootherCursorPos(x, y)
             
-            super.move(int(move_avg_x), int(move_avg_y))
+            super().move(int(move_avg_x), int(move_avg_y))
     
     def _scaleToMonitor(self, x: float, y: float) -> Tuple[float, float]:
         x = x * MONITOR_WIDTH / self.frameWidth
