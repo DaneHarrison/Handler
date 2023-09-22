@@ -1,4 +1,4 @@
-<div align=center>
+<div align='center'>
 
 # Handler
 
@@ -8,9 +8,9 @@
 <br>
 <br>
 
-<div align="right">
+<!-- <div align="right">
 <img src='res/' width="500"/>
-</div>
+</div> -->
 </div>
 
 ## Overview
@@ -44,16 +44,16 @@
 
 ### Making changes
 1. Create a new gesture:  
-All new gestures should be added to the gesture folder and should implement the [gesture base class]() as well as some sort of cooldown to prevent duplicate actions
+All new gestures should be added to the gesture folder and should implement the [gesture base class](https://github.com/DaneHarrison/Handler/blob/main/src/gestures/gesture.py) as well as some sort of cooldown to prevent duplicate actions
 
 2. Adding it to HandTracker:  
-The list of gestures, where new gesture should be added to, can be found in the [HandTracker]() constructor. Not that the once a gesture is detected, all other checks are abandoned. In short, **order matters**
+The list of gestures, where new gesture should be added to, can be found in the [HandTracker](https://github.com/DaneHarrison/Handler/blob/main/src/handTracker.py) constructor. Not that the once a gesture is detected, all other checks are abandoned. In short, **order matters**
 
-3. Testing:  
-Gestures are detected by distances between different hand points, therefore, to test which hand points are most unique to a given gesture it is useful to use the setup gesture. This option can easily be toggled through the SETUP_MODE constant  in [main]()
+3. Distances:
+Currently, gestures are detected based on distances between different hand points, however, these will vary between users and how close a user is to their camera. Therefore, it is important that all distances for all future changes be calculated in a similar range i.e **[38 - 45]** as seen in the [setup file](https://github.com/DaneHarrison/Handler/blob/main/src/gestures/setup.py)
 
-4. Distances:
-Currently, gestures are detected based on distances between different hand points. However, these will vary between users and distances
+4. Testing:  
+Gestures are detected by distances between different hand points, therefore, to test which hand points are most unique to a given gesture it is useful to use the setup gesture. This option can easily be toggled through the SETUP_MODE constant  in [main](https://github.com/DaneHarrison/Handler/blob/main/src/main.py)
 
 <br>
 

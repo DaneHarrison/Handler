@@ -14,6 +14,10 @@ class Setup(Gesture):
         return self.inSetUp
 
     def triggerAction(self, handTracker, mouse):
+        """
+        As per line 48, all future changes be calculated in a similar range i.e **[38 - 45]**
+        Using this constraint, the calculated distances can be scaled to be used at multiple distances
+        """
         thumbX, thumbY = handTracker.readPointPosi(Points.THUMB_TIP)
         middleX, middleY = handTracker.readPointPosi(Points.MIDDLE_FINGER_MCP)
 
