@@ -58,4 +58,4 @@ class SurfsUp(Gesture):
 
             img = pyautogui.screenshot()
             img = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
-            cv2.imwrite('screenshot.png', img)
+            cv2.imwrite(f'{currAction}.png', img)
